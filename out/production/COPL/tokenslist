@@ -1,0 +1,54 @@
+public class tokenslist {
+
+    String value;
+    int place;
+String[] tokens= {"import", "/*", "*/", "symbol", "//", "constants", "function", "type", "byte", "define",
+        "is", "of", "call", "integer", "float", "set",
+        "exit", "global", "declarations", "endfun", "begin", "if", "endif", "else",
+        "display", "set", "double", "input", "return", "long",
+        "short", "pointer", "NodeType", "destroy", "structures", "variables",
+        "while", "struct", "endstruct", "endwhile", "declarations", "+",
+        "-", "*", "/", ">", "<", "=",
+        "(", ")", "band", "bor", "bxor",};
+    Node head;
+    Node tail;
+    public void add(String value){
+        boolean run=false;
+        //checks to make sure value is an applicable token
+        for(int num=0; num< tokens.length; num++){
+            if(tokens[num].equals(value)){
+                place=num;
+                run=true;
+                return;
+            }
+        }
+        //if value was an applicable token added to list
+        if(run){
+
+            if(head==null){
+                head=new Node(value,place);
+            }
+            else{
+                Node start=head;
+                while(start.next!=null){
+                    start=start.next;
+
+                }
+                start.next=new Node(value,place);
+            }
+        }
+
+    }
+
+    class Node{
+        int place1;
+        String value1;
+        Node next;
+        Node(String value1, int place1 ){
+            this.place1=place1;
+            this.value1=value1;
+            next=null;
+        }
+
+    }
+}

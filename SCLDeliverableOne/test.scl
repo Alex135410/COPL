@@ -1,0 +1,7 @@
+global integer x = 10;
+function main() begin
+    display x;
+    if (x > 5) begin
+        display "x is greater than 5";
+    endif
+endfun
