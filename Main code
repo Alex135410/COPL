@@ -1,0 +1,25 @@
+import java.io.File;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+     Scanner scan= new Scanner(System.in);
+
+             String filename;
+             filename=scan.nextLine();
+        File enterfile;
+        Scanner file;
+
+
+            try {
+                enterfile = new File(filename);
+                file = new Scanner(enterfile);
+            }
+            catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+
+    }
+    }
