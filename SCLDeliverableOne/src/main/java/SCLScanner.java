@@ -50,12 +50,12 @@ public class SCLScanner {
                 tokens.add(new Token(word, TokenType.KEYWORD));
             } else if (Arrays.asList(OPERATORS).contains(word)) {
                 tokens.add(new Token(word, TokenType.OPERATOR));
-            } else if (word.matches("\\d+(\\.\\d+)?")) { // Check for constants (numbers)
+            } else if (word.matches("\\d+(\\.\\d+)?")) {
                 tokens.add(new Token(word, TokenType.CONSTANT));
-            } else if (word.matches("[a-zA-Z_][a-zA-Z0-9_]*")) { // Check for identifiers
+            } else if (word.matches("[a-zA-Z_][a-zA-Z0-9_]*")) {
                 tokens.add(new Token(word, TokenType.IDENTIFIER));
             } else {
-                tokens.add(new Token(word, TokenType.SPECIAL_CHAR)); // Special characters
+                tokens.add(new Token(word, TokenType.SPECIAL_CHAR));
             }
         }
 
