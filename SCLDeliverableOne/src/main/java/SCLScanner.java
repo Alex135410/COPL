@@ -17,44 +17,58 @@ public class SCLScanner {
             "+", "-", "*", "/", ">", "<", "=", "(", ")", "band", "bor", "bxor"
     };
 
-
+    // enum to represent the type of token
     private enum TokenType {
         KEYWORD, IDENTIFIER, OPERATOR, CONSTANT, SPECIAL_CHAR
     }
 
-
+    // token class to store the value and type of token
     private static class Token {
         String value;
         TokenType type;
 
+        // constructor to initialize a token
         Token(String value, TokenType type) {
             this.value = value;
             this.type = type;
         }
 
+        // override toString() to provide a readable output of the token
         @Override
         public String toString() {
             return "{ value: " + value + ", type: " + type + " }";
         }
     }
 
-
+    // method to scan the input string and generate a list of tokens
     public static List<Token> scan(String input) {
         List<Token> tokens = new ArrayList<>();
+
+        // split the input string into words using regex. regex splits on whitespace or around special characters
         String[] words = input.split("\\s+|(?<=[(){}\\[\\]=+\\-*/<>,;])|(?=[(){}\\[\\]=+\\-*/<>,;])");
 
+        // process each word
         for (String word : words) {
-            if (word.isEmpty()) continue;
+            if (word.isEmpty()) continue; // this skips empty words
 
+            //  will check if the word is a keyword
             if (Arrays.asList(KEYWORDS).contains(word)) {
                 tokens.add(new Token(word, TokenType.KEYWORD));
-            } else if (Arrays.asList(OPERATORS).contains(word)) {
+            }
+            // this will check if the word is an operator
+            else if (Arrays.asList(OPERATORS).contains(word)) {
                 tokens.add(new Token(word, TokenType.OPERATOR));
-            } else if (word.matches("\\d+(\\.\\d+)?")) {
+            }
+            // this will check if the word is a constant
+            else if (word.matches("\\d+(\\.\\d+)?")) {
                 tokens.add(new Token(word, TokenType.CONSTANT));
-            } else if (word.matches("[a-zA-Z_][a-zA-Z0-9_]*")) {
+            }
+            // this will check if the word is an identifier
+            else if (word.matches("[a-zA-Z_][a-zA-Z0-9_]*")) {
                 tokens.add(new Token(word, TokenType.IDENTIFIER));
-            } else {
+            }
+            // if none of the above, this will be treat it as a special character
+            else {
                 tokens.add(new Token(word, TokenType.SPECIAL_CHAR));
             }
         }
@@ -62,57 +76,61 @@ public class SCLScanner {
         return tokens;
     }
 
-
+    // method to convert the list of tokens to a JSON string
     public static String tokensToJson(List<Token> tokens) {
-        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonArray = new JSONArray(); // creates a JSON array to store tokens
+
+        // will convert each token to a JSON object and add it to the array above
         for (Token token : tokens) {
             JSONObject jsonToken = new JSONObject();
-            jsonToken.put("value", token.value);
-            jsonToken.put("type", token.type.toString());
+            jsonToken.put("value", token.value); // add the token value
+            jsonToken.put("type", token.type.toString()); // add the token type
             jsonArray.put(jsonToken);
         }
-        return jsonArray.toString(2);
+
+        return jsonArray.toString(2); // return the JSON array as a string
     }
 
-
+    // main method
     public static void main(String[] args) {
+        // to check if the input file is provided as a command-line argument
         if (args.length == 0) {
             System.out.println("Usage: java SCLScanner <input_file>");
             return;
         }
 
-        String inputFile = args[0];
-        String outputFile = "tokens.json";
+        String inputFile = args[0]; // get the input file path
+        String outputFile = "tokens.json"; // define the output JSON file name
 
         try {
-
+            // reads the input file here
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             StringBuilder sourceCode = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
-                sourceCode.append(line).append("\n");
+                sourceCode.append(line).append("\n"); // append each line to the source code
             }
             reader.close();
 
-
+            // scan the source code to generate tokens
             List<Token> tokens = scan(sourceCode.toString());
 
-
+            // prints the tokens
             System.out.println("Tokens:");
             for (Token token : tokens) {
                 System.out.println(token);
             }
 
-
+            // writes the tokens to a JSON file
             BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-            writer.write(tokensToJson(tokens));
+            writer.write(tokensToJson(tokens)); // converts tokens to JSON and write to file
             writer.close();
 
             System.out.println("Tokens written to " + outputFile);
 
         } catch (IOException e) {
+
             System.err.println("Error reading or writing file: " + e.getMessage());
         }
     }
 }
-
