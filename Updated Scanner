@@ -112,6 +112,15 @@ public class SCLScanner {
                 }
                 jsonToken.put("Number", tokenvalue);
             }
+            if(token.type.toString().equals("OPERATOR")){
+                int tokenvalue=0;
+                for(int num=0; num<operatorkeywords.length; num++){
+                    if(OPERATORS[num].equals(token.value)){
+                        tokenvalue=num;
+                    }
+                }
+                jsonToken.put("Number", tokenvalue);
+            }
             jsonToken.put("type", token.type.toString()); // add the token type
             jsonArray.put(jsonToken);
         }
@@ -161,3 +170,4 @@ public class SCLScanner {
             System.err.println("Error reading or writing file: " + e.getMessage());
         }
     }
+}
