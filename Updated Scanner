@@ -98,11 +98,29 @@ public class SCLScanner {
     // method to convert the list of tokens to a JSON string
     public static String tokensToJson(List<Token> tokens) {
         JSONArray jsonArray = new JSONArray(); // creates a JSON array to store tokens
-
+        int specialvalue=200;
+        int Identifier=600;
+        int constant=800;
         // will convert each token to a JSON object and add it to the array above
         for (Token token : tokens) {
             JSONObject jsonToken = new JSONObject();
+
+
+
             jsonToken.put("value", token.value); // add the token value
+            jsonToken.put("type", token.type.toString()); // add the token type
+            if(token.type.toString().equals("CONSTANT")){
+                jsonToken.put("Number", constant);
+                constant++;
+            }
+            if(token.type.toString().equals("SPECIAL_CHAR")){
+                jsonToken.put("Number", specialvalue);
+                specialvalue++;
+            }
+            if(token.type.toString().equals("IDENTIFIER")){
+                jsonToken.put("Number", Identifier);
+                Identifier++;
+            }
             if(token.type.toString().equals("KEYWORD")){
                 int tokenvalue=0;
                 for(int num=0; num<Numberskeywords.length; num++){
@@ -121,7 +139,7 @@ public class SCLScanner {
                 }
                 jsonToken.put("Number", tokenvalue);
             }
-            jsonToken.put("type", token.type.toString()); // add the token type
+
             jsonArray.put(jsonToken);
         }
 
