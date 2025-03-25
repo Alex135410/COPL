@@ -1,1 +1,104 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+
+public class parse {
+    String file;
+    parse(String file){
+        this.file=file;
+        words = file.split("\\s+|(?<=[(){}\\[\\]=+\\-*/<>,;])|(?=[(){}\\[\\]=+\\-*/<>,;])");
+        int value=0;
+        int number=0;
+        int key=0;
+
+        for (int num=0; num< words.length;num++) {
+            //System.out.println(words[num]);
+            if(words[num].equals("\"Number\":")){
+                value++;
+
+
+            }
+        }
+        Values=new String[value];
+        Numbers=new String[value];
+        keywords=new String[value];
+        value=0;
+        for (int num=0; num< words.length;num++) {
+            if(words[num].equals("\"Number\":")){
+                if(words[num+1].equals("\"")){
+                    Numbers[number]=("\""+words[num+2]+"\"");
+                    number++;
+                }else{
+                Numbers[number]=words[num+1];
+                number++;}
+
+            }
+            if(words[num].equals("\"value\":")){
+                if(words[num+1].equals("\"")){
+                    Values[value]=("\""+words[num+2]+"\"");
+                    value++;
+                }
+                else{
+                Values[value]=words[num+1];
+                value++;}
+
+            }
+            if(words[num].equals("\"type\":")){
+                if(words[num+1].equals("\"")) {
+                    keywords[key] = ("\""+words[num+2]+"\"");
+                    key++;
+                }
+                keywords[key] = words[num + 1];
+                key++;
+            }
+        }
+        for (int num=0; num< Values.length;num++) {
+           System.out.println(Values[num]);
+        }
+    }
+    String Terminal;
+    String NonTerminal;
+    String operator;
+
+    Node left;
+    Node Right;
+    Node Middle;
+
+    Node Root;
+
+    public void parse(Node carry){}
+
+    String[] Values;
+    String[] Numbers;
+    String[] keywords;
+   String[] words;
+   class Node {
+        String value;
+
+        Node(String value){
+
+        }
+    }
+
+    public static void main(String[] args) {
+
+try {
+    BufferedReader reader = new BufferedReader(new FileReader("tokens.json"));
+    StringBuilder jsonfile= new StringBuilder();
+    String line;
+    while ((line = reader.readLine()) != null) {
+        jsonfile.append(line).append("\n"); // append each line to the source code
+    }
+    reader.close();
+    parse Parse= new parse(jsonfile.toString());
+
+
+}
+catch(Exception e){
+
+}
+    }
+
+
+
+}
 
