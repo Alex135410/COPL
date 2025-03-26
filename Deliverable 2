@@ -3,7 +3,7 @@ import java.io.FileReader;
 
 public class parse {
     String file;
-
+//starts the code
     public void start() {
         Node begin = new Node("");
         parsestart(begin);
@@ -11,6 +11,8 @@ public class parse {
         Node run = Root;
         print(Root);
     }
+
+    //prints the code in order
 
     public void print(Node run) {
       if (run.Middle != null) {
@@ -28,7 +30,7 @@ public class parse {
     }
 
     ;
-
+//Splits the tokens file into three different arrays keywords, values, and Number id's
     parse(String file) {
         this.file = file;
         words = file.split("\\s+|(?<=[(){}\\[\\]=+\\-*/<>,;])|(?=[(){}\\[\\]=+\\-*/<>,;])");
@@ -83,14 +85,14 @@ public class parse {
         }
     }
 
-    String Terminal;
-    String NonTerminal;
-    String operator;
+
 
     int number;
 
     Node Root;
     int left=0;
+
+    //creates the parse tree
 
     public void parsestart(Node carry) {
         try {
@@ -165,7 +167,7 @@ public class parse {
 
         //}
         catch (Exception e){}
- 
+
 
     }
 
@@ -192,14 +194,16 @@ public class parse {
     public static void main(String[] args) {
 
 try {
+
     BufferedReader reader = new BufferedReader(new FileReader("tokens.json"));
     StringBuilder jsonfile= new StringBuilder();
     String line;
     while ((line = reader.readLine()) != null) {
-        jsonfile.append(line).append("\n"); // append each line to the source code
+        jsonfile.append(line).append("\n"); // append each line to the jsonfile
     }
     reader.close();
     parse Parse= new parse(jsonfile.toString());
+    //starts parsing
     Parse.start();
 
 
