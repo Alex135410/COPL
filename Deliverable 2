@@ -3,79 +3,189 @@ import java.io.FileReader;
 
 public class parse {
     String file;
-    parse(String file){
-        this.file=file;
-        words = file.split("\\s+|(?<=[(){}\\[\\]=+\\-*/<>,;])|(?=[(){}\\[\\]=+\\-*/<>,;])");
-        int value=0;
-        int number=0;
-        int key=0;
 
-        for (int num=0; num< words.length;num++) {
+    public void start() {
+        Node begin = new Node("");
+        parsestart(begin);
+        System.out.println(Root.value);
+        Node run = Root;
+        print(Root);
+    }
+
+    public void print(Node run) {
+      if (run.Middle != null) {
+            System.out.println(run.Middle.value);
+       }
+       if (run.left != null) {
+            System.out.println(run.left.value);
+            print(run.left);
+       }
+
+        if (run.Right != null) {
+            System.out.println(run.Right.value);
+            print(run.Right);
+        }
+    }
+
+    ;
+
+    parse(String file) {
+        this.file = file;
+        words = file.split("\\s+|(?<=[(){}\\[\\]=+\\-*/<>,;])|(?=[(){}\\[\\]=+\\-*/<>,;])");
+        int value = 0;
+        int number = 0;
+        int key = 0;
+
+        for (int num = 0; num < words.length; num++) {
             //System.out.println(words[num]);
-            if(words[num].equals("\"Number\":")){
+            if (words[num].equals("\"Number\":")) {
                 value++;
 
 
             }
         }
-        Values=new String[value];
-        Numbers=new String[value];
-        keywords=new String[value];
-        value=0;
-        for (int num=0; num< words.length;num++) {
-            if(words[num].equals("\"Number\":")){
-                if(words[num+1].equals("\"")){
-                    Numbers[number]=("\""+words[num+2]+"\"");
+        Values = new String[value];
+        Numbers = new String[value];
+        keywords = new String[value];
+        value = 0;
+        for (int num = 0; num < words.length; num++) {
+            if (words[num].equals("\"Number\":")) {
+                if (words[num + 1].equals("\"")) {
+                    Numbers[number] = ("\"" + words[num + 2] + "\"");
                     number++;
-                }else{
-                Numbers[number]=words[num+1];
-                number++;}
+                } else {
+                    Numbers[number] = words[num + 1];
+                    number++;
+                }
 
             }
-            if(words[num].equals("\"value\":")){
-                if(words[num+1].equals("\"")){
-                    Values[value]=("\""+words[num+2]+"\"");
+            if (words[num].equals("\"value\":")) {
+                if (words[num + 1].equals("\"")) {
+                    Values[value] = ("\"" + words[num + 2] + "\"");
+                    value++;
+                } else {
+                    Values[value] = words[num + 1];
                     value++;
                 }
-                else{
-                Values[value]=words[num+1];
-                value++;}
 
             }
-            if(words[num].equals("\"type\":")){
-                if(words[num+1].equals("\"")) {
-                    keywords[key] = ("\""+words[num+2]+"\"");
+            if (words[num].equals("\"type\":")) {
+                if (words[num + 1].equals("\"")) {
+                    keywords[key] = ("\"" + words[num + 2] + "\"");
                     key++;
                 }
                 keywords[key] = words[num + 1];
                 key++;
             }
         }
-        for (int num=0; num< Values.length;num++) {
-           System.out.println(Values[num]);
+        for (int num = 0; num < Values.length; num++) {
+            //System.out.println(keywords[num]);
         }
     }
+
     String Terminal;
     String NonTerminal;
     String operator;
 
-    Node left;
-    Node Right;
-    Node Middle;
+    int number;
 
     Node Root;
+    int left=0;
 
-    public void parse(Node carry){}
+    public void parsestart(Node carry) {
+        try {
+            Node start;
+            if (Root == null) {
+                //  int find=1;
+                number = 2;
+                Root = new Node(Values[0]);
+
+                if (Root.value.equals("\"import\"")) {
+                    start = Root;
+                    start.left = new Node(Values[1]);
+                }
+                carry = Root;
+
+            }
+            start = carry;
+            String current = keywords[number];
+            if (number != Values.length) {
+           //     System.out.println(carry.value);
+
+                if (keywords[number].equals("\"KEYWORD\"")) {
+                    if (left == 1) {
+                        number++;
+                    }
+
+                    start.Right = new Node(Values[number]);
+                    number++;
+                    parsestart(start.Right);
+
+
+                }
+
+                if (keywords[number].equals("\"OPERATOR\"")) {
+                    start.Middle = new Node(Values[number]);
+                    number++;
+                    if (keywords[number].equals("\"KEYWORD\"")) {
+
+
+                        start.Right = new Node(Values[number]);
+                        number++;
+                        parsestart(start.Right);
+
+
+                    }
+                }
+
+
+                if (keywords[number].equals("\"CONSTANT\"") || keywords[number].equals("\"IDENTIFIER\"") || keywords[number].equals("\"SPECIAL_CHAR\"")) {
+                    if (keywords[number + 1].equals("\"KEYWORDS\"")) {
+                        System.out.println("yes");
+                        //if (left == 0) {
+                           // System.out.println("yes");
+                            //start.left = new Node(Values[number]);
+                            //left++;
+                            //return;
+                        }
+                        //return;
+
+                    }
+
+                   // left = 0;
+
+                    start.left = new Node(Values[number]);
+                    number++;
+                    parsestart(start.left);
+
+                }
+
+
+            }
+
+        //}
+        catch (Exception e){}
+ 
+
+    }
+
+
+
+
+
 
     String[] Values;
     String[] Numbers;
     String[] keywords;
    String[] words;
    class Node {
+       Node left;
+       Node Right;
+       Node Middle;
         String value;
 
         Node(String value){
-
+        this.value=value;
         }
     }
 
@@ -90,6 +200,7 @@ try {
     }
     reader.close();
     parse Parse= new parse(jsonfile.toString());
+    Parse.start();
 
 
 }
