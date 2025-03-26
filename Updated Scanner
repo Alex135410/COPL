@@ -11,11 +11,11 @@ public class SCLScanner {
             "import", "global", "constants", "function", "type", "byte", "define", "is", "of", "call",
             "integer", "float", "set", "exit", "declarations", "endfun", "begin", "if", "endif", "else",
             "display", "double", "input", "return", "long", "short", "pointer", "NodeType", "destroy",
-            "structures", "variables", "while", "struct", "endstruct", "endwhile"
+            "structures", "variables", "while", "struct", "endstruct", "endwhile","symbol",
     };
     private static final String[] Numberskeywords={
          "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19"
-         ,"20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35"
+         ,"20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36"
     };
 
     private static final String[] OPERATORS = {
@@ -59,13 +59,17 @@ public class SCLScanner {
         // process each word
         for (String word : words) {
             if ((word.equals("description"))){
-                description=1;
+                description=2;
             }
             if (word.equals("*")){
-                description=0;
+                description--;
                 continue;
             }
-            if (description==1){
+            if(word.equals("/")){
+                description--;
+                continue;
+            }
+            if (description==2 ||description==1){
                 continue;
             }
             if (word.isEmpty()) continue; // this skips empty words
@@ -188,4 +192,3 @@ public class SCLScanner {
             System.err.println("Error reading or writing file: " + e.getMessage());
         }
     }
-}
